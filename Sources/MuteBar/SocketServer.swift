@@ -120,6 +120,11 @@ final class SocketServer {
 
     var clientCount: Int { connections.count }
 
+    /// Snapshot of connected client fds (thread-safe).
+    var clientFDs: [Int32] {
+        queue.sync { Array(connections.keys) }
+    }
+
     private func log(_ msg: String) {
         FileHandle.standardError.write(Data(("MuteBar[socket] \(msg)\n").utf8))
     }

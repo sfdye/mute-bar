@@ -43,6 +43,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem!
     private var state: AppState = .noMeeting
     private var browserConnected = false
+    // fd -> latest state per browser connection; any in-meeting browser wins
+    private var connStates: [Int32: (inMeeting: Bool, muted: Bool)] = [:]
 
     private var hotkey: HotkeyPreset {
         get {
@@ -66,23 +68,38 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         HotKeyCenter.action = { [weak self] in self?.toggleMute() }
         applyHotkey()
 
-        SocketServer.shared.onMessage = { [weak self] _, json in
+        SocketServer.shared.onMessage = { [weak self] fd, json in
             DispatchQueue.main.async {
-                guard let type = json["type"] as? String else { return }
+                guard let self, let type = json["type"] as? String else { return }
                 if type == "state" {
                     let inMeeting = json["inMeeting"] as? Bool ?? false
                     let muted = json["muted"] as? Bool ?? false
-                    self?.setState(inMeeting ? (muted ? .muted : .live) : .noMeeting)
+                    self.connStates[fd] = (inMeeting, muted)
+                    self.recomputeState()
                 }
             }
         }
         SocketServer.shared.onClientChange = { [weak self] count in
             DispatchQueue.main.async {
-                self?.browserConnected = count > 0
-                self?.rebuildMenu()
+                guard let self else { return }
+                self.browserConnected = count > 0
+                // drop states from closed connections
+                let live = Set(SocketServer.shared.clientFDs)
+                self.connStates = self.connStates.filter { live.contains($0.key) }
+                self.recomputeState()
+                self.rebuildMenu()
             }
         }
         SocketServer.shared.start()
+    }
+
+    private func recomputeState() {
+        let inMeeting = connStates.values.filter { $0.inMeeting }
+        if let s = inMeeting.last {
+            setState(s.muted ? .muted : .live)
+        } else {
+            setState(.noMeeting)
+        }
     }
 
     // MARK: - Actions
