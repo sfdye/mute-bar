@@ -17,6 +17,9 @@ function connect() {
   }
   port.onMessage.addListener(onNativeMessage);
   port.onDisconnect.addListener(() => {
+    // Expected whenever the MuteBar app restarts; ack to silence Chrome's
+    // "Unchecked runtime.lastError" warning.
+    void chrome.runtime.lastError;
     port = null;
     setTimeout(connect, 2000);
   });
