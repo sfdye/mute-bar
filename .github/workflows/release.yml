@@ -1,0 +1,54 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  release:
+    runs-on: macos-14
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Import signing certificate
+        env:
+          APPLE_DEVELOPER_ID_P12_BASE64: ${{ secrets.APPLE_DEVELOPER_ID_P12_BASE64 }}
+          APPLE_P12_PASSWORD: ${{ secrets.APPLE_P12_PASSWORD }}
+        run: |
+          CERTFILE=$(mktemp /tmp/certificate.XXXXXX.p12)
+          echo "$APPLE_DEVELOPER_ID_P12_BASE64" | base64 -d > "$CERTFILE"
+          security create-keychain -p "" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "" build.keychain
+          security import "$CERTFILE" -k build.keychain -P "$APPLE_P12_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -k "" build.keychain
+          rm -f "$CERTFILE"
+
+      - name: Build, sign, package
+        env:
+          SIGNING_IDENTITY: ${{ vars.SIGNING_IDENTITY }} # e.g. "Developer ID Application: Liuyang Wan (TEAMID)"
+        run: |
+          swift build -c release --product MuteBar
+          swift build -c release --product mutebar-host
+          scripts/build-app.sh
+          codesign --force --deep --options runtime --timestamp --sign "$SIGNING_IDENTITY" .build/app/MuteBar.app
+          scripts/package-dmg.sh .build/MuteBar.dmg
+
+      - name: Notarize and staple
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          xcrun notarytool submit .build/MuteBar.dmg --apple-id "$APPLE_ID" --password "$APPLE_APP_PASSWORD" --team-id "$APPLE_TEAM_ID" --wait
+          xcrun stapler staple .build/MuteBar.dmg
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" .build/MuteBar.dmg \
+            --title "MuteBar ${GITHUB_REF_NAME}" \
+            --generate-notes

@@ -1,5 +1,7 @@
 # MuteBar
 
+[![CI](https://github.com/sfdye/mute-bar/actions/workflows/ci.yml/badge.svg)](https://github.com/sfdye/mute-bar/actions/workflows/ci.yml)
+
 A macOS menu bar app + browser extension that gives you one **global hotkey (F6)** to mute/unmute **Google Meet** — at the *app level*, so your microphone keeps working for everything else (speech-to-text, dictation, recording).
 
 ## How it works
@@ -29,6 +31,25 @@ Then:
 1. `chrome://extensions` (or `arc://extensions`) → Developer mode → **Load unpacked** → select `extension/`
 2. Start `MuteBar.app`
 3. Join a Google Meet call, press **F6**
+
+## Development
+
+```bash
+swift build                       # build app + host
+scripts/build-app.sh              # assemble .build/app/MuteBar.app
+scripts/smoke-test.sh             # app <-> host round trip, no browser needed
+scripts/package-dmg.sh            # .build/MuteBar.dmg
+```
+
+Releases (tags `v*`) are signed with Developer ID, notarized, and published as GitHub Releases automatically. Required repo secrets: `APPLE_DEVELOPER_ID_P12_BASE64`, `APPLE_P12_PASSWORD`, `APPLE_ID`, `APPLE_APP_PASSWORD`, `APPLE_TEAM_ID`, and var `SIGNING_IDENTITY`.
+
+## Roadmap
+
+- [ ] Chrome Web Store listing (unlisted first)
+- [ ] Configurable hotkey UI (settings pane)
+- [ ] Launch at login (SMAppService)
+- [ ] More locales for Meet's mic-button labels
+- [ ] Zoom / Teams web support (the extension already matches on meet.google.com only)
 
 ## Notes
 
