@@ -50,6 +50,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+        item.button?.imageScaling = .scaleProportionallyDown
         item.button?.image = statusImage()
         statusItem = item
         rebuildMenu()
@@ -154,10 +155,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     /// Template monochrome icon: blends with the menubar and adapts to
-    /// light/dark mode automatically. Drawn a size up from the default
-    /// status-item symbol so it reads clearly.
+    /// light/dark mode automatically. Sized relative to the system status
+    /// bar thickness (not a fixed point size) so it stays correct on both
+    /// standard and tall/notched menu bars; the cell clamps it if needed.
     private func statusImage() -> NSImage? {
-        let config = NSImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+        let config = NSImage.SymbolConfiguration(
+            pointSize: NSStatusBar.system.thickness * 0.66, weight: .medium
+        )
         let image = NSImage(systemSymbolName: state.symbol, accessibilityDescription: state.title)?
             .withSymbolConfiguration(config)
         image?.isTemplate = true
