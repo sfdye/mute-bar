@@ -37,17 +37,16 @@ Everything needed for the developer dashboard submission.
 ## Pre-upload checklist
 
 - [x] `scripts/package-extension.sh` → `dist/mutebar-extension-<version>.zip` (dev `key` stripped; store assigns a new ID)
-- [ ] Screenshots: at least 1, 1280×800 or 640×400 (suggested: menubar icon states + F6 toggling a real Meet call)
-- [ ] Small promo tile 440×280 (optional)
-- [ ] Privacy justification text pasted from above
-- [ ] One-time $5 developer registration fee (if the account has never published)
+- [x] Screenshots: 2 × 1280×800 (Meet call window only, mic live + muted via F6)
+- [x] Privacy justification text (single purpose, nativeMessaging, host permission, no remote code, no data collection, privacy policy at docs/privacy-policy.md)
+- [x] Submitted for review: 2026-09-08, item `jdnohcgdlpndiinaklmckmaonpjimkfg`, unlisted, auto-publish after approval
 
-## After first upload
+## After approval / publication
 
-1. Note the **store-assigned extension ID** from the dashboard.
+1. Install the store version, then read its **extension ID** from `chrome://extensions` (only visible post-publication — the dashboard only shows the item ID).
 2. Add it to `scripts/install.sh` so the native host manifest lists BOTH origins:
    - dev: `chrome-extension://iggmpoondbifidlpilegncmifabajbep/*`
-   - store: `chrome-extension://<STORE_ID>/*`
+   - store: `chrome-extension://<STORE_EXTENSION_ID>/*`
    (Chrome 151+ requires `allowed_origins` in the host manifest.)
 3. Cut an app release with the updated `install.sh` and re-run it locally.
-4. **Do not install the dev and store versions at the same time** — both content scripts would run in Meet tabs and every hotkey press would toggle twice. Uninstall the unpacked dev copy before installing from the store.
+4. **Uninstall the unpacked dev copy before installing from the store** — running both makes every hotkey press toggle twice.
