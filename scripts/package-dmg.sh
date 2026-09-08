@@ -5,7 +5,9 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 OUT="${1:-.build/MuteBar.dmg}"
-scripts/build-app.sh >/dev/null
+# Only build if the app bundle is absent — rebuilding here would wipe a
+# Developer ID signature applied by sign-release.sh.
+[[ -d .build/app/MuteBar.app ]] || scripts/build-app.sh >/dev/null
 
 STAGE=$(mktemp -d)
 trap 'rm -rf "$STAGE"' EXIT
