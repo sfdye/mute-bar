@@ -41,7 +41,7 @@ scripts/smoke-test.sh             # app <-> host round trip, no browser needed
 scripts/package-dmg.sh            # .build/MuteBar.dmg
 ```
 
-Releases (tags `v*`) are signed with Developer ID, notarized, and published as GitHub Releases automatically. Required repo secrets: `APPLE_DEVELOPER_ID_P12_BASE64`, `APPLE_P12_PASSWORD`, `APPLE_ID`, `APPLE_APP_PASSWORD`, `APPLE_TEAM_ID`, and var `SIGNING_IDENTITY`.
+Signing and notarization are done locally (Developer ID + `notarytool`); releases are published manually.
 
 ## Roadmap
 
