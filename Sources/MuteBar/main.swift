@@ -2,21 +2,6 @@ import AppKit
 import Carbon.HIToolbox
 import ServiceManagement
 
-struct HotkeyPreset {
-    let label: String
-    let keyCode: UInt32
-    let modifiers: UInt32
-
-    static let presets: [HotkeyPreset] = [
-        .init(label: "F6", keyCode: UInt32(kVK_F6), modifiers: 0),
-        .init(label: "F7", keyCode: UInt32(kVK_F7), modifiers: 0),
-        .init(label: "F8", keyCode: UInt32(kVK_F8), modifiers: 0),
-        .init(label: "F5", keyCode: UInt32(kVK_F5), modifiers: 0),
-        .init(label: "⌘⇧M", keyCode: UInt32(kVK_ANSI_M), modifiers: UInt32(cmdKey | shiftKey)),
-        .init(label: "⌃⌥M", keyCode: UInt32(kVK_ANSI_M), modifiers: UInt32(controlKey | optionKey)),
-    ]
-}
-
 enum AppState {
     case noMeeting
     case live
@@ -46,12 +31,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     // fd -> latest state per browser connection; any in-meeting browser wins
     private var connStates: [Int32: (inMeeting: Bool, muted: Bool)] = [:]
 
-    private var hotkey: HotkeyPreset {
+    private var hotkey: Hotkey {
         get {
-            let code = UserDefaults.standard.integer(forKey: "hotkeyCode")
-            let mods = UserDefaults.standard.integer(forKey: "hotkeyMods")
-            return HotkeyPreset.presets.first { Int($0.keyCode) == code && Int($0.modifiers) == mods }
-                ?? HotkeyPreset.presets[0]
+            let defaults = UserDefaults.standard
+            guard defaults.object(forKey: "hotkeyCode") != nil else { return .default }
+            return Hotkey(
+                keyCode: UInt32(defaults.integer(forKey: "hotkeyCode")),
+                modifiers: UInt32(defaults.integer(forKey: "hotkeyMods"))
+            )
         }
         set {
             UserDefaults.standard.set(Int(newValue.keyCode), forKey: "hotkeyCode")
@@ -59,9 +46,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    private var recorder: RecorderPanel?
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        item.button?.image = NSImage(systemSymbolName: state.symbol, accessibilityDescription: state.title)
+        item.button?.image = statusImage()
         statusItem = item
         rebuildMenu()
 
@@ -109,14 +98,37 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func applyHotkey() {
-        HotKeyCenter.register(keyCode: hotkey.keyCode, modifiers: hotkey.modifiers)
+        if !HotKeyCenter.register(keyCode: hotkey.keyCode, modifiers: hotkey.modifiers) {
+            NSLog("MuteBar: hotkey registration failed for \(hotkey.label)")
+        }
     }
 
-    @objc private func selectHotkey(_ sender: NSMenuItem) {
-        guard let preset = sender.representedObject as? HotkeyPreset else { return }
-        hotkey = preset
-        applyHotkey()
-        rebuildMenu()
+    @objc private func changeHotkey() {
+        HotKeyCenter.unregister() // don't trigger the old shortcut while recording
+        NSApp.activate(ignoringOtherApps: true)
+        let panel = RecorderPanel(currentLabel: hotkey.label)
+        panel.onDone = { [weak self, weak panel] result in
+            guard let self else { return }
+            if let result {
+                if HotKeyCenter.register(keyCode: result.keyCode, modifiers: result.modifiers) {
+                    self.hotkey = result
+                } else {
+                    // registration failed (system conflict) — keep the old shortcut
+                    let alert = NSAlert()
+                    alert.messageText = "\"\(result.label)\" is not available"
+                    alert.informativeText = "It conflicts with an existing system shortcut. Please pick another."
+                    alert.runModal()
+                    self.applyHotkey()
+                }
+            } else {
+                self.applyHotkey()
+            }
+            self.rebuildMenu()
+            self.recorder = nil
+        }
+        recorder = panel
+        panel.center()
+        panel.makeKeyAndOrderFront(nil)
     }
 
     @objc private func toggleLaunchAtLogin(_ sender: NSMenuItem) {
@@ -137,9 +149,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func setState(_ newState: AppState) {
         guard newState != state else { return }
         state = newState
-        statusItem.button?.image = NSImage(systemSymbolName: state.symbol, accessibilityDescription: state.title)
-        statusItem.button?.contentTintColor = (state == .muted) ? .systemRed : nil
+        statusItem.button?.image = statusImage()
         rebuildMenu()
+    }
+
+    /// Template monochrome icon: blends with the menubar and adapts to
+    /// light/dark mode automatically. Drawn a size up from the default
+    /// status-item symbol so it reads clearly.
+    private func statusImage() -> NSImage? {
+        let config = NSImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+        let image = NSImage(systemSymbolName: state.symbol, accessibilityDescription: state.title)?
+            .withSymbolConfiguration(config)
+        image?.isTemplate = true
+        return image
     }
 
     private func rebuildMenu() {
@@ -160,18 +182,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let toggle = NSMenuItem(title: "Toggle mute (\(hotkey.label))", action: #selector(toggleMuteMenu), keyEquivalent: "")
         menu.addItem(toggle)
 
-        let shortcutMenu = NSMenu(title: "Mute shortcut")
-        for preset in HotkeyPreset.presets {
-            let item = NSMenuItem(
-                title: preset.label, action: #selector(selectHotkey(_:)), keyEquivalent: ""
-            )
-            item.representedObject = preset
-            item.state = (preset.keyCode == hotkey.keyCode && preset.modifiers == hotkey.modifiers) ? .on : .off
-            shortcutMenu.addItem(item)
-        }
-        let shortcutItem = NSMenuItem(title: "Mute shortcut", action: nil, keyEquivalent: "")
-        shortcutItem.submenu = shortcutMenu
-        menu.addItem(shortcutItem)
+        let shortcutLine = NSMenuItem(
+            title: "Mute shortcut: \(hotkey.label)", action: nil, keyEquivalent: ""
+        )
+        shortcutLine.isEnabled = false
+        menu.addItem(shortcutLine)
+        menu.addItem(NSMenuItem(
+            title: "Change Shortcut…", action: #selector(changeHotkey), keyEquivalent: ""
+        ))
 
         let loginItem = NSMenuItem(
             title: "Start at Login", action: #selector(toggleLaunchAtLogin(_:)), keyEquivalent: ""

@@ -7,10 +7,12 @@ enum HotKeyCenter {
     private static var handler: EventHandlerRef?
     static var action: () -> Void = {}
 
-    static func register(keyCode: UInt32, modifiers: UInt32 = 0) {
+    @discardableResult
+    static func register(keyCode: UInt32, modifiers: UInt32 = 0) -> Bool {
         unregister()
         let id = EventHotKeyID(signature: signature, id: 1)
-        RegisterEventHotKey(keyCode, modifiers, id, GetEventDispatcherTarget(), 0, &ref)
+        let status = RegisterEventHotKey(keyCode, modifiers, id, GetEventDispatcherTarget(), 0, &ref)
+        guard status == noErr else { return false }
 
         var spec = EventTypeSpec(
             eventClass: OSType(kEventClassKeyboard),
@@ -32,6 +34,7 @@ enum HotKeyCenter {
             }
             return noErr
         }, 1, &spec, nil, &handler)
+        return true
     }
 
     static func unregister() {
