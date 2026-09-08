@@ -82,7 +82,9 @@
     const s = readState();
     if (!force && same(s, last)) return;
     last = s;
-    try { chrome.runtime.sendMessage({ type: 'state', ...s }); } catch (_) {}
+    // Promise rejection (SW asleep) must be caught explicitly — a try/catch
+    // around sendMessage does not cover it.
+    chrome.runtime.sendMessage({ type: 'state', ...s }).catch(() => {});
   }
 
   let pushTimer = null;
