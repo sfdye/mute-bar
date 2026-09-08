@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "MuteBar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Global mute hotkey for Google Meet. Companion extension for the MuteBar macOS app.",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2nvKIVxwZRddI2OMyWRSPHBE5sB9MkCm5xgiU2EbFAQPfp09Ti8e+6maf4srJAWmtiU7mTWIFgUcnYdGZNFDgnkwTm5g6wIF4YlffF1ZXvx+WyeGuPtC5bq7juMmJQjhDflOf3bJjRd6/KFsFwGdb2PayfPH6AH9Pe14gz15amYvPmSsXcOgYFI7c0ogYfBili841NKVjGbNgsglgdJTwzImMOX9CquGorrRqbcY54jn4NyPqu0a5jvDZ3OnSoYLlwPIKCHk/D7lv7RecqcTuRMAYuejyTqbDEfR/Ee8LrUgtewPvznzhEhRGxjGMKwzHwoqs+fX3WdWJaI5djv3HQIDAQAB",
   "permissions": ["nativeMessaging"],

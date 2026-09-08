@@ -30,7 +30,7 @@ scripts/install.sh .build/app/MuteBar.app   # register native host for your brow
 Then:
 1. `chrome://extensions` (or `arc://extensions`) → Developer mode → **Load unpacked** → select `extension/`
 2. Start `MuteBar.app`
-3. Join a Google Meet call, press **F6**
+3. Join a Google Meet call, press **F6** (change it via the menu-bar "Mute shortcut" submenu)
 
 ## Development
 
@@ -45,9 +45,9 @@ Releases (tags `v*`) are signed with Developer ID, notarized, and published as G
 
 ## Roadmap
 
+- [x] Configurable mute shortcut (menu-bar submenu: F5–F8, ⌘⇧M, ⌃⌥M; persisted)
+- [x] Launch at login (SMAppService)
 - [ ] Chrome Web Store listing (unlisted first)
-- [ ] Configurable hotkey UI (settings pane)
-- [ ] Launch at login (SMAppService)
 - [ ] More locales for Meet's mic-button labels
 - [ ] Zoom / Teams web support (the extension already matches on meet.google.com only)
 
