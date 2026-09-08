@@ -2,8 +2,16 @@
   "manifest_version": 3,
   "name": "MuteBar",
   "version": "0.2.0",
-  "description": "Global mute hotkey for Google Meet. Companion extension for the MuteBar macOS app.",
+  "description": "Mute Google Meet from anywhere with one global hotkey. Companion extension for the MuteBar macOS app.",
+  "homepage_url": "https://github.com/sfdye/mute-bar",
+  "minimum_chrome_version": "116",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2nvKIVxwZRddI2OMyWRSPHBE5sB9MkCm5xgiU2EbFAQPfp09Ti8e+6maf4srJAWmtiU7mTWIFgUcnYdGZNFDgnkwTm5g6wIF4YlffF1ZXvx+WyeGuPtC5bq7juMmJQjhDflOf3bJjRd6/KFsFwGdb2PayfPH6AH9Pe14gz15amYvPmSsXcOgYFI7c0ogYfBili841NKVjGbNgsglgdJTwzImMOX9CquGorrRqbcY54jn4NyPqu0a5jvDZ3OnSoYLlwPIKCHk/D7lv7RecqcTuRMAYuejyTqbDEfR/Ee8LrUgtewPvznzhEhRGxjGMKwzHwoqs+fX3WdWJaI5djv3HQIDAQAB",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
   "permissions": ["nativeMessaging"],
   "host_permissions": ["https://meet.google.com/*"],
   "background": { "service_worker": "background.js" },
@@ -14,5 +22,12 @@
       "run_at": "document_idle"
     }
   ],
-  "action": { "title": "MuteBar" }
+  "action": {
+    "title": "MuteBar",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
+    }
+  }
 }

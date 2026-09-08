@@ -30,7 +30,7 @@ scripts/install.sh .build/app/MuteBar.app   # register native host for your brow
 Then:
 1. `chrome://extensions` (or `arc://extensions`) → Developer mode → **Load unpacked** → select `extension/`
 2. Start `MuteBar.app`
-3. Join a Google Meet call, press **F6** (change it via the menu-bar "Mute shortcut" submenu)
+3. Join a Google Meet call, press **F6** (change it via the menu-bar "Change Shortcut…" item — press any combo to record it)
 
 ## Development
 
@@ -39,13 +39,15 @@ swift build                       # build app + host
 scripts/build-app.sh              # assemble .build/app/MuteBar.app
 scripts/smoke-test.sh             # app <-> host round trip, no browser needed
 scripts/package-dmg.sh            # .build/MuteBar.dmg
+swift scripts/gen-icons.swift      # regenerate extension icons into extension/icons/
+scripts/package-extension.sh      # Chrome Web Store zip into dist/ (strips the dev key)
 ```
 
-Signing and notarization are done locally (Developer ID + `notarytool`); releases are published manually.
+Signing and notarization are done locally (Developer ID + `notarytool`); releases are published manually. Store submission copy and checklist: [docs/store-listing.md](docs/store-listing.md).
 
 ## Roadmap
 
-- [x] Configurable mute shortcut (menu-bar submenu: F5–F8, ⌘⇧M, ⌃⌥M; persisted)
+- [x] Configurable mute shortcut (press-to-record, any combo; letters need ⌘/⌥/⌃)
 - [x] Launch at login (SMAppService)
 - [ ] Chrome Web Store listing (unlisted first)
 - [ ] More locales for Meet's mic-button labels
