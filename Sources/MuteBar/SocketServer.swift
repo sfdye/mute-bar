@@ -54,6 +54,23 @@ final class SocketServer {
         log("listening on \(path)")
     }
 
+    /// Tear down the listener and unlink the socket file on clean quit, so
+    /// mutebar-host can tell "user quit the app" (socket absent) apart from
+    /// "app crashed" (stale socket left behind).
+    func stop() {
+        acceptSource?.cancel()
+        acceptSource = nil
+        for (fd, source) in connections {
+            connections[fd] = nil
+            source.cancel()
+        }
+        if serverFD >= 0 {
+            close(serverFD)
+            serverFD = -1
+        }
+        unlink(socketPath)
+    }
+
     private func acceptClient() {
         var addr = sockaddr()
         var len = socklen_t(MemoryLayout<sockaddr>.size)
