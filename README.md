@@ -1,7 +1,8 @@
 # MuteBar
 
 [![CI](https://github.com/sfdye/mute-bar/actions/workflows/ci.yml/badge.svg)](https://github.com/sfdye/mute-bar/actions/workflows/ci.yml)
-<a href="https://chromewebstore.google.com/detail/mutebar/jdnohcgdlpndiinaklmckmaonpjimkfg"><img src="docs/badge-chrome-web-store.png" alt="Available in the Chrome Web Store" valign="middle"></a>
+<br>
+<a href="https://chromewebstore.google.com/detail/mutebar/jdnohcgdlpndiinaklmckmaonpjimkfg"><img src="docs/badge-chrome-web-store.png" alt="Available in the Chrome Web Store"></a>
 
 A macOS menu bar app + browser extension that gives you one **global hotkey (F6)** to mute/unmute **Google Meet** — at the *app level*, so your microphone keeps working for everything else (speech-to-text, dictation, recording).
 
