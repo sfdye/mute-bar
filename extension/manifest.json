@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "MuteBar",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Mute Google Meet from anywhere with one global hotkey. Companion extension for the MuteBar macOS app.",
   "homepage_url": "https://github.com/sfdye/mute-bar",
   "minimum_chrome_version": "116",
