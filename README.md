@@ -10,7 +10,7 @@ A macOS menu bar app + browser extension that gives you one **global hotkey (F6)
 
 ## Getting started
 
-1. Download [MuteBar.dmg](https://github.com/sfdye/mute-bar/releases/latest/download/MuteBar.dmg) from [Releases](https://github.com/sfdye/mute-bar/releases), open it, and drag **MuteBar** into **Applications**. First launch: right-click → **Open** to get past Gatekeeper (the app is signed, not App Store). A mic icon appears in the menu bar, and the native messaging host is registered for Chrome/Arc/Edge/Brave/Chromium automatically.
+1. Download [MuteBar.dmg](https://github.com/sfdye/mute-bar/releases/latest/download/MuteBar.dmg) from [Releases](https://github.com/sfdye/mute-bar/releases), open it, and drag **MuteBar** into **Applications**. First launch: right-click → **Open**. A mic icon appears in the menu bar.
 2. Install the [Chrome extension](https://chromewebstore.google.com/detail/mutebar/jdnohcgdlpndiinaklmckmaonpjimkfg).
 3. Join a Google Meet call and press **F6**. MuteBar clicks Meet's own mic button (so participants see you muted) and the menu bar icon mirrors the state — "Mic on", "Muted", or "No active meeting".
 
