@@ -43,7 +43,7 @@ MuteBar.app ──unix socket── mutebar-host ──stdio── browser exten
 
 ## Install (dev)
 
-Build the app from source (or skip this and grab the DMG above, then just do step 1):
+Build the app from source — if you just want to use MuteBar, follow [Getting started](#getting-started) (DMG + store extension) instead.
 
 ```bash
 git clone <repo> && cd mute-bar
