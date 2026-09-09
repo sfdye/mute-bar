@@ -25,7 +25,7 @@ If pressing F6 does nothing, it's usually the function-key setting: enable "Use 
 ## How it works
 
 ```
-F6 (global hotkey)                    click Meet's own mute button
+global hotkey                         click Meet's own mute button
    │                                        ▲
    ▼                                        │
 MuteBar.app ──unix socket── mutebar-host ──stdio── browser extension ── content script
