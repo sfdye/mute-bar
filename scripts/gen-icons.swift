@@ -1,13 +1,13 @@
 // Generates the extension store icons (16/32/48/128 px) into extension/icons/.
 // White mic.slash glyph on a dark rounded tile; SF Symbols via AppKit.
 // Run: swift scripts/gen-icons.swift extension/icons
+// Optional sizes: swift scripts/gen-icons.swift <outDir> 16 32 64 128 256 512 1024
 
 import AppKit
 
-let sizes = [16, 32, 48, 128]
-let outDir = CommandLine.arguments.count > 1
-    ? CommandLine.arguments[1]
-    : "extension/icons"
+let args = CommandLine.arguments
+let outDir = args.count > 1 ? args[1] : "extension/icons"
+let sizes = args.count > 2 ? args.dropFirst(2).compactMap(Int.init) : [16, 32, 48, 128]
 
 func tintedGlyph(pointSize: CGFloat) -> NSImage? {
     let config = NSImage.SymbolConfiguration(pointSize: pointSize, weight: .bold)
