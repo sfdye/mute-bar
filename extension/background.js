@@ -1,6 +1,6 @@
 'use strict';
 
-const HOST_NAME = 'com.lwan.mutebar';
+const HOST_NAME = 'com.sfdye.mutebar';
 const MEET_URL = 'https://meet.google.com/*';
 
 let port = null;

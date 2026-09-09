@@ -23,7 +23,7 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
 <plist version="1.0">
 <dict>
     <key>CFBundleIdentifier</key>
-    <string>com.lwan.mutebar</string>
+    <string>com.sfdye.mutebar</string>
     <key>CFBundleName</key>
     <string>MuteBar</string>
     <key>CFBundleExecutable</key>
