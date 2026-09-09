@@ -22,6 +22,11 @@ func launchApp() {
 }
 
 func connectSocket(retries: Int = 20) -> Int32 {
+    // Socket file present but unconnectable means the app crashed and left a
+    // stale socket behind — relaunch to recover. Absent means the app was
+    // quit cleanly (it unlinks the socket on terminate), or never ran; the
+    // user chose to exit, so don't resurrect it.
+    let stale = access(socketPath, F_OK) == 0
     for attempt in 0...retries {
         let fd = socket(AF_UNIX, SOCK_STREAM, 0)
         if fd >= 0 {
@@ -40,7 +45,10 @@ func connectSocket(retries: Int = 20) -> Int32 {
             if result == 0 { log("connected to app (attempt \(attempt))"); return fd }
             close(fd)
         }
-        if attempt == 0 { launchApp() }
+        if attempt == 0 {
+            guard stale else { return -1 }
+            launchApp()
+        }
         usleep(300_000)
     }
     return -1

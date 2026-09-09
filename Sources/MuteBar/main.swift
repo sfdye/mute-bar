@@ -83,6 +83,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         SocketServer.shared.start()
     }
 
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        SocketServer.shared.stop()
+        return .terminateNow
+    }
+
     private func recomputeState() {
         let inMeeting = connStates.values.filter { $0.inMeeting }
         if let s = inMeeting.last {
