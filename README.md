@@ -51,7 +51,7 @@ scripts/build-app.sh                  # swift build + assemble MuteBar.app
 ```
 
 Then:
-1. `chrome://extensions` (or `arc://extensions`) → Developer mode → **Load unpacked** → select `extension/` (or just install the [store version](https://chromewebstore.google.com/detail/mutebar/jdnohcgdlpndiinaklmckmaonpjimkfg))
+1. `chrome://extensions` (or `arc://extensions`) → Developer mode → **Load unpacked** → select `extension/`
 2. Start `MuteBar.app` (registers the native messaging host itself on launch)
 3. Join a Google Meet call, press **F6** (change it via the menu-bar "Change Shortcut…" item — press any combo to record it)
 
