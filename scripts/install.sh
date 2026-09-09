@@ -20,7 +20,7 @@ fi
 # the store zip strips the dev key).
 DEV_EXTENSION_ID="iggmpoondbifidlpilegncmifabajbep"
 STORE_EXTENSION_ID="jdnohcgdlpndiinaklmckmaonpjimkfg"
-HOST_NAME="com.lwan.mutebar"
+HOST_NAME="com.sfdye.mutebar"
 
 MANIFEST=$(cat <<EOF
 {
