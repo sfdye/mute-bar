@@ -1,5 +1,9 @@
 # MuteBar
 
+<p align="center">
+  <img src="docs/logo.png" width="128" alt="MuteBar logo">
+</p>
+
 <a href="https://chromewebstore.google.com/detail/mutebar/jdnohcgdlpndiinaklmckmaonpjimkfg"><img src="docs/badge-chrome-web-store.png" alt="Available in the Chrome Web Store"></a>
 
 <!-- Hero screenshot TODO: capture the menu bar dropdown during a Meet call, save as docs/screenshot.png, then uncomment:
@@ -39,13 +43,15 @@ MuteBar.app ──unix socket── mutebar-host ──stdio── browser exten
 
 ## Install (dev)
 
+Build the app from source (or skip this and grab the DMG above, then just do step 1):
+
 ```bash
 git clone <repo> && cd mute-bar
 scripts/build-app.sh                  # swift build + assemble MuteBar.app
 ```
 
 Then:
-1. `chrome://extensions` (or `arc://extensions`) → Developer mode → **Load unpacked** → select `extension/`
+1. `chrome://extensions` (or `arc://extensions`) → Developer mode → **Load unpacked** → select `extension/` (or just install the [store version](https://chromewebstore.google.com/detail/mutebar/jdnohcgdlpndiinaklmckmaonpjimkfg))
 2. Start `MuteBar.app` (registers the native messaging host itself on launch)
 3. Join a Google Meet call, press **F6** (change it via the menu-bar "Change Shortcut…" item — press any combo to record it)
 
@@ -64,11 +70,9 @@ Signing and notarization are done locally (Developer ID + `notarytool`); release
 
 ## Roadmap
 
-- [x] Configurable mute shortcut (press-to-record, any combo; letters need ⌘/⌥/⌃)
-- [x] Launch at login (SMAppService)
-- [ ] Chrome Web Store listing (unlisted first)
 - [ ] More locales for Meet's mic-button labels
 - [ ] Zoom / Teams web support (the extension already matches on meet.google.com only)
+- [ ] More stores: Firefox Add-ons (AMO) / Edge Add-ons
 
 ## Notes
 
