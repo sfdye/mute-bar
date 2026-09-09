@@ -28,12 +28,11 @@ MuteBar.app ──unix socket── mutebar-host ──stdio── browser exten
 ```bash
 git clone <repo> && cd mute-bar
 scripts/build-app.sh                  # swift build + assemble MuteBar.app
-scripts/install.sh .build/app/MuteBar.app   # register native host for your browsers
 ```
 
 Then:
 1. `chrome://extensions` (or `arc://extensions`) → Developer mode → **Load unpacked** → select `extension/`
-2. Start `MuteBar.app`
+2. Start `MuteBar.app` (registers the native host itself; `scripts/install.sh .build/app/MuteBar.app` does it manually if needed)
 3. Join a Google Meet call, press **F6** (change it via the menu-bar "Change Shortcut…" item — press any combo to record it)
 
 ## Development
