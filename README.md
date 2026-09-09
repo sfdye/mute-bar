@@ -1,8 +1,10 @@
 # MuteBar
 
-[![CI](https://github.com/sfdye/mute-bar/actions/workflows/ci.yml/badge.svg)](https://github.com/sfdye/mute-bar/actions/workflows/ci.yml)
-<br>
 <a href="https://chromewebstore.google.com/detail/mutebar/jdnohcgdlpndiinaklmckmaonpjimkfg"><img src="docs/badge-chrome-web-store.png" alt="Available in the Chrome Web Store"></a>
+
+<!-- Hero screenshot TODO: capture the menu bar dropdown during a Meet call, save as docs/screenshot.png, then uncomment:
+<img src="docs/screenshot.png" width="360" alt="MuteBar menu bar showing live Meet mute state">
+-->
 
 A macOS menu bar app + browser extension that gives you one **global hotkey (F6)** to mute/unmute **Google Meet** — at the *app level*, so your microphone keeps working for everything else (speech-to-text, dictation, recording).
 
