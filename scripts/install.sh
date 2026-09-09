@@ -15,8 +15,11 @@ if [[ ! -x "$HOST_BIN" ]]; then
     exit 1
 fi
 
-# Stable dev extension ID (derived from the fixed public key in extension/manifest.json)
-EXTENSION_ID="iggmpoondbifidlpilegncmifabajbep"
+# Dev extension ID (derived from the fixed public key in extension/manifest.json;
+# stable across machines) and the Chrome Web Store ID (assigned at publishing;
+# the store zip strips the dev key).
+DEV_EXTENSION_ID="iggmpoondbifidlpilegncmifabajbep"
+STORE_EXTENSION_ID="jdnohcgdlpndiinaklmckmaonpjimkfg"
 HOST_NAME="com.lwan.mutebar"
 
 MANIFEST=$(cat <<EOF
@@ -25,8 +28,8 @@ MANIFEST=$(cat <<EOF
   "description": "MuteBar native host",
   "path": "$HOST_BIN",
   "type": "stdio",
-  "allowed_extensions": ["$EXTENSION_ID"],
-  "allowed_origins": ["chrome-extension://$EXTENSION_ID/*"]
+  "allowed_extensions": ["$DEV_EXTENSION_ID"],
+  "allowed_origins": ["chrome-extension://$DEV_EXTENSION_ID/*", "chrome-extension://$STORE_EXTENSION_ID/*"]
 }
 EOF
 )
