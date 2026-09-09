@@ -32,7 +32,7 @@ scripts/build-app.sh                  # swift build + assemble MuteBar.app
 
 Then:
 1. `chrome://extensions` (or `arc://extensions`) → Developer mode → **Load unpacked** → select `extension/`
-2. Start `MuteBar.app` (registers the native host itself; `scripts/install.sh .build/app/MuteBar.app` does it manually if needed)
+2. Start `MuteBar.app` (registers the native messaging host itself on launch)
 3. Join a Google Meet call, press **F6** (change it via the menu-bar "Change Shortcut…" item — press any combo to record it)
 
 ## Development
@@ -62,7 +62,7 @@ Signing and notarization are done locally (Developer ID + `notarytool`); release
 - Meet's in-call mic toggle is a `<button role="button" aria-label="Turn on/off microphone">`; the prejoin uses `div[role=button]`. The content script matches both, prefers the "turn on/off" label, and falls back to a broad localized regex.
 - Meet removes the toolbar buttons from the DOM when controls auto-hide. The content script keeps the last observed mute state (sticky) and, if the button is missing on toggle, wakes the toolbar with a synthetic mousemove before clicking.
 - The "You left the meeting" screen keeps the meeting URL; it is detected via its Rejoin / "Return to home screen" buttons.
-- Chrome 151+ requires `allowed_origins` (chrome-extension URL patterns) in the native host manifest — `allowed_extensions` alone is rejected. `install.sh` writes both (Firefox needs `allowed_extensions`).
+- Chrome 151+ requires `allowed_origins` (chrome-extension URL patterns) in the native host manifest — `allowed_extensions` alone is rejected. The app writes both when it registers (Firefox needs `allowed_extensions`).
 - State is aggregated across tabs in the service worker: any tab in a meeting wins, so a stale Meet tab can't clobber the live call's state.
 - Meet's keyboard-shortcut state ("⌘ + d") is displayed in the button label; MuteBar clicks the button rather than synthesizing key events.
 - Known edge: pressing F6 twice within ~300ms may land on muted (Meet's toggle lags the DOM label); debounce if it bothers you.

@@ -5,7 +5,7 @@ enum NativeHostRegistration {
     private static let devExtensionID = "iggmpoondbifidlpilegncmifabajbep"
     private static let storeExtensionID = "jdnohcgdlpndiinaklmckmaonpjimkfg"
 
-    // browser-name -> native messaging manifest directory (user-level; mirrors scripts/install.sh)
+    // browser-name -> native messaging manifest directory (user-level)
     private static let browserDirs = [
         "Library/Application Support/Google/Chrome/NativeMessagingHosts",
         "Library/Application Support/Arc/User Data/NativeMessagingHosts",

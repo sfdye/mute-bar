@@ -44,9 +44,9 @@ Everything needed for the developer dashboard submission.
 ## After approval / publication
 
 1. Install the store version, then read its **extension ID** from `chrome://extensions` (only visible post-publication — the dashboard only shows the item ID).
-2. Add it to `scripts/install.sh` so the native host manifest lists BOTH origins:
+2. The app's native-host manifest (`Sources/MuteBar/NativeHostRegistration.swift`) must list BOTH origins:
    - dev: `chrome-extension://iggmpoondbifidlpilegncmifabajbep/*`
    - store: `chrome-extension://<STORE_EXTENSION_ID>/*`
    (Chrome 151+ requires `allowed_origins` in the host manifest.)
-3. Cut an app release with the updated `install.sh` and re-run it locally.
+3. Cut an app release and re-run it locally — the app re-registers the manifest on every launch.
 4. **Uninstall the unpacked dev copy before installing from the store** — running both makes every hotkey press toggle twice.
