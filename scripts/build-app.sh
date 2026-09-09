@@ -48,4 +48,4 @@ PLIST
 codesign --force --sign - "$APP"
 
 echo "==> done: $APP"
-echo "    Next: scripts/install.sh \"$PWD/$APP\""
+echo "    Next: launch it — the app registers the native host on start"

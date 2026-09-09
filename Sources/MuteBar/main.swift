@@ -80,6 +80,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 self.rebuildMenu()
             }
         }
+        DispatchQueue.global(qos: .utility).async {
+            NativeHostRegistration.register()
+        }
         SocketServer.shared.start()
     }
 

@@ -8,10 +8,24 @@
 
 A macOS menu bar app + browser extension that gives you one **global hotkey (F6)** to mute/unmute **Google Meet** — at the *app level*, so your microphone keeps working for everything else (speech-to-text, dictation, recording).
 
+## Getting started
+
+1. Download [MuteBar.dmg](https://github.com/sfdye/mute-bar/releases/latest/download/MuteBar.dmg) from [Releases](https://github.com/sfdye/mute-bar/releases), open it, and drag **MuteBar** into **Applications**. First launch: right-click → **Open**. A mic icon appears in the menu bar.
+2. Install the [Chrome extension](https://chromewebstore.google.com/detail/mutebar/jdnohcgdlpndiinaklmckmaonpjimkfg).
+3. Join a Google Meet call and press **F6**. MuteBar clicks Meet's own mic button (so participants see you muted) and the menu bar icon mirrors the state — "Mic on", "Muted", or "No active meeting".
+
+While you're in a meeting, the menu bar icon doubles as a status readout:
+
+- **Browser: connected / not connected** — whether the extension is talking to the app (if not, check the extension is installed and the app is running).
+- **Mute shortcut: F6** — the current hotkey. Pick **Change Shortcut…** to record any combo (letters need ⌘/⌥/⌃).
+- **Start at Login** — keep MuteBar running from the get-go.
+
+If pressing F6 does nothing, it's usually the function-key setting: enable "Use F1, F2, etc. keys as standard function keys" or hold **Fn** (see Notes). If the menu bar says "Browser: not connected", reload the extension or restart the browser after first installing the app.
+
 ## How it works
 
 ```
-F6 (global hotkey)                    click Meet's own mute button
+global hotkey                         click Meet's own mute button
    │                                        ▲
    ▼                                        │
 MuteBar.app ──unix socket── mutebar-host ──stdio── browser extension ── content script
@@ -28,12 +42,11 @@ MuteBar.app ──unix socket── mutebar-host ──stdio── browser exten
 ```bash
 git clone <repo> && cd mute-bar
 scripts/build-app.sh                  # swift build + assemble MuteBar.app
-scripts/install.sh .build/app/MuteBar.app   # register native host for your browsers
 ```
 
 Then:
 1. `chrome://extensions` (or `arc://extensions`) → Developer mode → **Load unpacked** → select `extension/`
-2. Start `MuteBar.app`
+2. Start `MuteBar.app` (registers the native messaging host itself on launch)
 3. Join a Google Meet call, press **F6** (change it via the menu-bar "Change Shortcut…" item — press any combo to record it)
 
 ## Development
@@ -63,7 +76,7 @@ Signing and notarization are done locally (Developer ID + `notarytool`); release
 - Meet's in-call mic toggle is a `<button role="button" aria-label="Turn on/off microphone">`; the prejoin uses `div[role=button]`. The content script matches both, prefers the "turn on/off" label, and falls back to a broad localized regex.
 - Meet removes the toolbar buttons from the DOM when controls auto-hide. The content script keeps the last observed mute state (sticky) and, if the button is missing on toggle, wakes the toolbar with a synthetic mousemove before clicking.
 - The "You left the meeting" screen keeps the meeting URL; it is detected via its Rejoin / "Return to home screen" buttons.
-- Chrome 151+ requires `allowed_origins` (chrome-extension URL patterns) in the native host manifest — `allowed_extensions` alone is rejected. `install.sh` writes both (Firefox needs `allowed_extensions`).
+- Chrome 151+ requires `allowed_origins` (chrome-extension URL patterns) in the native host manifest — `allowed_extensions` alone is rejected. The app writes both when it registers (Firefox needs `allowed_extensions`).
 - State is aggregated across tabs in the service worker: any tab in a meeting wins, so a stale Meet tab can't clobber the live call's state.
 - Meet's keyboard-shortcut state ("⌘ + d") is displayed in the button label; MuteBar clicks the button rather than synthesizing key events.
 - Known edge: pressing F6 twice within ~300ms may land on muted (Meet's toggle lags the DOM label); debounce if it bothers you.
