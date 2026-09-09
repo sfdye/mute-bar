@@ -8,6 +8,20 @@
 
 A macOS menu bar app + browser extension that gives you one **global hotkey (F6)** to mute/unmute **Google Meet** — at the *app level*, so your microphone keeps working for everything else (speech-to-text, dictation, recording).
 
+## Getting started
+
+1. Download [MuteBar.dmg](https://github.com/sfdye/mute-bar/releases/latest/download/MuteBar.dmg) from [Releases](https://github.com/sfdye/mute-bar/releases), open it, and drag **MuteBar** into **Applications**. First launch: right-click → **Open** to get past Gatekeeper (the app is signed, not App Store). A mic icon appears in the menu bar, and the native messaging host is registered for Chrome/Arc/Edge/Brave/Chromium automatically.
+2. Install the [Chrome extension](https://chromewebstore.google.com/detail/mutebar/jdnohcgdlpndiinaklmckmaonpjimkfg).
+3. Join a Google Meet call and press **F6**. MuteBar clicks Meet's own mic button (so participants see you muted) and the menu bar icon mirrors the state — "Mic on", "Muted", or "No active meeting".
+
+While you're in a meeting, the menu bar icon doubles as a status readout:
+
+- **Browser: connected / not connected** — whether the extension is talking to the app (if not, check the extension is installed and the app is running).
+- **Mute shortcut: F6** — the current hotkey. Pick **Change Shortcut…** to record any combo (letters need ⌘/⌥/⌃).
+- **Start at Login** — keep MuteBar running from the get-go.
+
+If pressing F6 does nothing, it's usually the function-key setting: enable "Use F1, F2, etc. keys as standard function keys" or hold **Fn** (see Notes). If the menu bar says "Browser: not connected", reload the extension or restart the browser after first installing the app.
+
 ## How it works
 
 ```
