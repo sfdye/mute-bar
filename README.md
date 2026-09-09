@@ -41,9 +41,7 @@ MuteBar.app ──unix socket── mutebar-host ──stdio── browser exten
 - **mutebar-host** — native messaging host embedded in the app bundle; bridges the extension to the app.
 - **Extension** — content script toggles Meet's own mic button (so the UI and participants see the real state); a MutationObserver pushes state changes back.
 
-## Install (dev)
-
-Build the app from source — if you just want to use MuteBar, follow [Getting started](#getting-started) (DMG + store extension) instead.
+## Development
 
 ```bash
 git clone <repo> && cd mute-bar
@@ -54,8 +52,6 @@ Then:
 1. `chrome://extensions` (or `arc://extensions`) → Developer mode → **Load unpacked** → select `extension/`
 2. Start `MuteBar.app` (registers the native messaging host itself on launch)
 3. Join a Google Meet call, press **F6** (change it via the menu-bar "Change Shortcut…" item — press any combo to record it)
-
-## Development
 
 ```bash
 swift build                       # build app + host
