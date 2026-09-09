@@ -16,7 +16,9 @@ if [[ ! -x "$HOST_BIN" ]]; then
 fi
 
 # Stable dev extension ID (derived from the fixed public key in extension/manifest.json)
+# and the Chrome Web Store ID (assigned at publishing; the store zip strips the dev key).
 EXTENSION_ID="iggmpoondbifidlpilegncmifabajbep"
+STORE_EXTENSION_ID="jdnohcgdlpndiinaklmckmaonpjimkfg"
 HOST_NAME="com.lwan.mutebar"
 
 MANIFEST=$(cat <<EOF
@@ -26,7 +28,7 @@ MANIFEST=$(cat <<EOF
   "path": "$HOST_BIN",
   "type": "stdio",
   "allowed_extensions": ["$EXTENSION_ID"],
-  "allowed_origins": ["chrome-extension://$EXTENSION_ID/*"]
+  "allowed_origins": ["chrome-extension://$EXTENSION_ID/*", "chrome-extension://$STORE_EXTENSION_ID/*"]
 }
 EOF
 )
