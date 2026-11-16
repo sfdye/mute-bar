@@ -17,7 +17,7 @@ Everything needed for the developer dashboard submission.
 >
 > REQUIREMENT: this extension is a companion to the MuteBar macOS menu bar app and does nothing without it. Download the app from https://github.com/sfdye/mute-bar, run it once, and the hotkey works. macOS only.
 >
-> Works in Google Meet on Chrome, Arc, Brave, Edge, and other Chromium browsers. Configure the hotkey from the MuteBar menu bar icon (default F6).
+> Works in Google Meet on Chrome, Arc, Yab, Brave, Edge, and other Chromium browsers. Configure the hotkey from the MuteBar menu bar icon (default F6).
 >
 > Open source (MIT). No accounts, no telemetry, no data collection.
 
