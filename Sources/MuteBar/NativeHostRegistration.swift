@@ -9,6 +9,7 @@ enum NativeHostRegistration {
     private static let browserDirs = [
         "Library/Application Support/Google/Chrome/NativeMessagingHosts",
         "Library/Application Support/Arc/User Data/NativeMessagingHosts",
+        "Library/Application Support/Yab/Chromium/NativeMessagingHosts",
         "Library/Application Support/Microsoft Edge/NativeMessagingHosts",
         "Library/Application Support/BraveSoftware/Brave-Browser/NativeMessagingHosts",
         "Library/Application Support/Chromium/NativeMessagingHosts",
